@@ -1,3 +1,4 @@
+// Package resources list cli commands to list all ressources and modules found in terraform state file
 /*
 MIT License
 
@@ -21,24 +22,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package version
+package resources
 
 import (
-	"fmt"
-	"runtime"
+	"github.com/spf13/cobra"
 )
 
-// GitCommit returns the git commit that was compiled. This will be filled in by the compiler.
-var GitCommit string
+// NewResourceCommand creates a new `resources`command
+func NewResourceCommand() *cobra.Command {
+	command := &cobra.Command{
+		Use:   "resources",
+		Short: "List available resources in state file given in argument.",
+		Run: func(cmd *cobra.Command, args []string) {
+			err := cmd.Help()
+			if err != nil {
+				return
+			}
+		},
+	}
 
-// Version returns the main version number that is being run at the moment.
-const Version = "0.1.0"
-
-// BuildDate returns the date the binary was built
-var BuildDate = ""
-
-// GoVersion returns the version of the go runtime used to compile the binary
-var GoVersion = runtime.Version()
-
-// OsArch returns the os and arch used to build the binary
-var OsArch = fmt.Sprintf("%s %s", runtime.GOOS, runtime.GOARCH)
+	command.AddCommand(NewListCommand())
+	command.AddCommand(NewRefactorCommand())
+	return command
+}

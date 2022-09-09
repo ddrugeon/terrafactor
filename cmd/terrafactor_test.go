@@ -21,24 +21,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package version
+package cmd_test
 
 import (
-	"fmt"
-	"runtime"
+	"testing"
+
+	"github.com/golang/mock/gomock"
+	"github.com/stretchr/testify/assert"
+	"gitlab.com/david.drugeon-hamon/terrafactor/cmd"
+	"gitlab.com/david.drugeon-hamon/terrafactor/cmd/options"
 )
 
-// GitCommit returns the git commit that was compiled. This will be filled in by the compiler.
-var GitCommit string
+func TestNewRootCommand(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
-// Version returns the main version number that is being run at the moment.
-const Version = "0.1.0"
+	cmd := cmd.NewRootCommand()
+	assert.Equal(t, options.ApplicationName, cmd.Use)
+	assert.Equal(t, options.ApplicationShort, cmd.Short)
+	assert.Equal(t, options.ApplicationLong, cmd.Long)
 
-// BuildDate returns the date the binary was built
-var BuildDate = ""
-
-// GoVersion returns the version of the go runtime used to compile the binary
-var GoVersion = runtime.Version()
-
-// OsArch returns the os and arch used to build the binary
-var OsArch = fmt.Sprintf("%s %s", runtime.GOOS, runtime.GOARCH)
+}

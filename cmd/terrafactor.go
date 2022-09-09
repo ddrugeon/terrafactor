@@ -1,3 +1,4 @@
+// Package cmd list cli commands
 /*
 MIT License
 
@@ -21,24 +22,60 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-package version
+package cmd
 
 import (
 	"fmt"
-	"runtime"
+	"os"
+	"strings"
+
+	"gitlab.com/david.drugeon-hamon/terrafactor/cmd/options"
+
+	"github.com/spf13/viper"
+	"gitlab.com/david.drugeon-hamon/terrafactor/cmd/resources"
+
+	"github.com/spf13/cobra"
 )
 
-// GitCommit returns the git commit that was compiled. This will be filled in by the compiler.
-var GitCommit string
+const (
+	envPrefix = "TFCT"
+)
 
-// Version returns the main version number that is being run at the moment.
-const Version = "0.1.0"
+// NewRootCommand builds the main cli application and
+// adds children command hierarchy
+func NewRootCommand() *cobra.Command {
+	command := &cobra.Command{
+		Use:   options.ApplicationName,
+		Short: options.ApplicationShort,
+		Long:  options.ApplicationLong,
+	}
 
-// BuildDate returns the date the binary was built
-var BuildDate = ""
+	command.AddCommand(
+		resources.NewResourceCommand(),
+		NewVersionCommand(),
+	)
 
-// GoVersion returns the version of the go runtime used to compile the binary
-var GoVersion = runtime.Version()
+	return command
+}
 
-// OsArch returns the os and arch used to build the binary
-var OsArch = fmt.Sprintf("%s %s", runtime.GOOS, runtime.GOARCH)
+// Execute is the main entry point of this command
+func Execute() {
+	initConfig()
+
+	cmd := NewRootCommand()
+
+	if err := cmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
+func initConfig() {
+	viper.SetEnvPrefix(envPrefix)
+	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
+	viper.AutomaticEnv()
+}
+
+func init() {
+	cobra.OnInitialize(initConfig)
+}
