@@ -89,7 +89,6 @@ dockers:
   - 'ddrugeon/terrafactor:{{ .Tag }}-arm64'
   - 'ghcr.io/ddrugeon/terrafactor:{{ .Tag }}-arm64'
   dockerfile: Dockerfile
-  use: buildx
   build_flag_templates:
   - "--pull"
   - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ddrugeon/terrafactor/main/README.md"
