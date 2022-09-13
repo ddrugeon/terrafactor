@@ -1,0 +1,70 @@
+project_name: terrafactor
+before:
+  hooks:
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - 386
+      - amd64
+      - arm
+      - arm64
+    ignore:
+      - goos: darwin
+        goarch: 386
+      - goos: windows
+        goarch: 386
+    ldflags:
+      - -s -w -X github.com/ddrugeon/terrafactor/version.Version={{.Version}} -X github.com/ddrugeon/terrafactor/version.GitCommit={{.Commit}} -X github.com/ddrugeon/terrafactor/version.BuildDate={{.Date}}
+checksum:
+  name_template: "{{ .ProjectName }}_checksums.txt"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^*.md:"
+      - "^docs:"
+      - "^test:"
+      - Merge pull request
+      - Merge branch
+archives:
+  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+      - goos: windows
+        format: zip
+    files:
+      - LICENSE
+      - README.md
+brews:
+    tap:
+      owner: terrafactor
+      name: homebrew-cli
+    url_template: "https://github.com/ddrugeon/terrafactor/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+
+    commit_author:
+      name: ddrugeon
+      email: zebeurton@gmail.com
+
+    folder: Formula
+
+    # Your app's description.
+    # Default is empty.
+    description: "A simple cli to generate move instruction for terraform when refactoring files."
+
+    license: "MIT"
+
+    # Packages your package depends on.
+    dependencies:
+      - name: git
+      - name: go
