@@ -1,7 +1,14 @@
 project_name: terrafactor
+env:
+  - GO111MODULE=on
+
 before:
   hooks:
-    - go mod download
+    - go mod tidy
+
+snapshot:
+  name_template: '{{ incpatch .Version }}-next'
+
 builds:
   - env:
       - CGO_ENABLED=0
@@ -14,26 +21,109 @@ builds:
       - amd64
       - arm
       - arm64
+    goarm:
+      - "7"
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X github.com/ddrugeon/terrafactor/version.Version={{.Version}} -X github.com/ddrugeon/terrafactor/version.GitCommit={{.Commit}} -X github.com/ddrugeon/terrafactor/version.BuildDate={{.Date}}
     ignore:
       - goos: darwin
         goarch: 386
       - goos: windows
         goarch: 386
-    ldflags:
-      - -s -w -X github.com/ddrugeon/terrafactor/version.Version={{.Version}} -X github.com/ddrugeon/terrafactor/version.GitCommit={{.Commit}} -X github.com/ddrugeon/terrafactor/version.BuildDate={{.Date}}
+
+universal_binaries:
+- replace: false
+
 checksum:
   name_template: "{{ .ProjectName }}_checksums.txt"
+
 changelog:
   sort: asc
+  use: github
   filters:
     exclude:
-      - "^*.md:"
-      - "^docs:"
-      - "^test:"
+      - '^test:'
+      - '^chore'
+      - 'merge conflict'
       - Merge pull request
+      - Merge remote-tracking branch
       - Merge branch
+      - go mod tidy
+  groups:
+    - title: Dependency updates
+      regexp: "^.*feat\\(deps\\)*:+.*$"
+      order: 300
+    - title: 'New Features'
+      regexp: "^.*feat[(\\w)]*:+.*$"
+      order: 100
+    - title: 'Bug fixes'
+      regexp: "^.*fix[(\\w)]*:+.*$"
+      order: 200
+    - title: 'Documentation updates'
+      regexp: "^.*docs[(\\w)]*:+.*$"
+      order: 400
+    - title: Other work
+      order: 9999
+
+dockers:
+- image_templates:
+  - 'ddrugeon/terrafactor:{{ .Tag }}-amd64'
+  - 'ghcr.io/ddrugeon/terrafactor:{{ .Tag }}-amd64'
+  dockerfile: Dockerfile.goreleaser
+  build_flag_templates:
+  - "--pull"
+  - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ddrugeon/terrafactor/main/README.md"
+  - "--label=io.artifacthub.package.maintainers=[{\"name\":\"David Drugeon-Hamon\",\"email\":\"zebeurton@gmail.com\"}]"
+  - "--label=io.artifacthub.package.license=MIT"
+  - "--label=org.opencontainers.image.description=A simple cli to generate move instruction for terraform when refactoring files."
+  - "--label=org.opencontainers.image.created={{.Date}}"
+  - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  - "--label=org.opencontainers.image.version={{.Version}}"
+  - "--label=org.opencontainers.image.source={{.GitURL}}"
+  - "--platform=linux/amd64"
+- image_templates:
+  - 'ddrugeon/terrafactor:{{ .Tag }}-arm64'
+  - 'ghcr.io/ddrugeon/terrafactor:{{ .Tag }}-arm64'
+  dockerfile: Dockerfile
+  use: buildx
+  build_flag_templates:
+  - "--pull"
+  - "--label=io.artifacthub.package.readme-url=https://raw.githubusercontent.com/ddrugeon/terrafactor/main/README.md"
+  - "--label=io.artifacthub.package.maintainers=[{\"name\":\"David Drugeon-Hamon\",\"email\":\"zebeurton@gmail.com\"}]"
+  - "--label=io.artifacthub.package.license=MIT"
+  - "--label=org.opencontainers.image.description=A simple cli to generate move instruction for terraform when refactoring files."
+  - "--label=org.opencontainers.image.created={{.Date}}"
+  - "--label=org.opencontainers.image.name={{.ProjectName}}"
+  - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+  - "--label=org.opencontainers.image.version={{.Version}}"
+  - "--label=org.opencontainers.image.source={{.GitURL}}"
+  - "--platform=linux/arm64"
+  goarch: arm64
+
+docker_manifests:
+- name_template: 'ddrugeon/terrafactor:{{ .Tag }}'
+  image_templates:
+  - 'ddrugeon/terrafactor:{{ .Tag }}-amd64'
+  - 'ddrugeon/terrafactor:{{ .Tag }}-arm64'
+- name_template: 'ghcr.io/ddrugeon/terrafactor:{{ .Tag }}'
+  image_templates:
+  - 'ghcr.io/ddrugeon/terrafactor:{{ .Tag }}-amd64'
+  - 'ghcr.io/ddrugeon/terrafactor:{{ .Tag }}-arm64'
+- name_template: 'ddrugeon/terrafactor:latest'
+  image_templates:
+  - 'ddrugeon/terrafactor:{{ .Tag }}-amd64'
+  - 'ddrugeon/terrafactor:{{ .Tag }}-arm64'
+- name_template: 'ghcr.io/ddrugeon/terrafactor:latest'
+  image_templates:
+  - 'ghcr.io/ddrugeon/terrafactor:{{ .Tag }}-amd64'
+  - 'ghcr.io/ddrugeon/terrafactor:{{ .Tag }}-arm64'
+
 archives:
-  - name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
     replacements:
       darwin: Darwin
       linux: Linux
@@ -41,30 +131,15 @@ archives:
       386: i386
       amd64: x86_64
     format_overrides:
-      - goos: windows
-        format: zip
+    - goos: windows
+      format: zip
     files:
-      - LICENSE
       - README.md
-brews:
-    tap:
-      owner: terrafactor
-      name: homebrew-cli
-    url_template: "https://github.com/ddrugeon/terrafactor/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+      - LICENSE.md
 
-    commit_author:
-      name: ddrugeon
-      email: zebeurton@gmail.com
+release:
+  footer: |
+    **Full Changelog**: https://github.com/ddrugeon/terrafactor/compare/{{ .PreviousTag }}...{{ .Tag }}
 
-    folder: Formula
-
-    # Your app's description.
-    # Default is empty.
-    description: "A simple cli to generate move instruction for terraform when refactoring files."
-
-    license: "MIT"
-
-    # Packages your package depends on.
-    dependencies:
-      - name: git
-      - name: go
+milestones:
+  - close: true

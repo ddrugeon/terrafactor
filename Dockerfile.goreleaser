@@ -1,0 +1,12 @@
+# Please DO NOT use it for build a normal Docker image for Create Go App CLI!
+# This Dockerfile used ONLY with GoReleaser project (`task release [TAG...]`).
+
+FROM scratch
+
+LABEL maintainer="David Drugeon-Hamon <zebeurton@gmail.com>"
+
+# Copy Create Go App CLI binary.
+COPY terrafactor /terrafactor
+
+# Set entry point.
+ENTRYPOINT ["/terrafactor"]

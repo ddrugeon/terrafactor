@@ -19,5 +19,7 @@ clean:
 install:
 	go get ./...
 
+
+
 main: main.go
 	goreleaser build --snapshot --rm-dist
