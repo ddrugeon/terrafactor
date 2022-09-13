@@ -29,10 +29,10 @@ import (
 	"os"
 	"strings"
 
-	"gitlab.com/david.drugeon-hamon/terrafactor/cmd/options"
+	"github.com/ddrugeon/terrafactor/cmd/options"
 
+	"github.com/ddrugeon/terrafactor/cmd/resources"
 	"github.com/spf13/viper"
-	"gitlab.com/david.drugeon-hamon/terrafactor/cmd/resources"
 
 	"github.com/spf13/cobra"
 )

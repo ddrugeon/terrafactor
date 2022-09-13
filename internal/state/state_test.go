@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright 2022 - © David Drugeon-Hamon
+# Copyright 2022 - © David Drugeon-Hamon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@ import (
 	"strings"
 	"testing"
 
-	"gitlab.com/david.drugeon-hamon/terrafactor/internal/state"
+	"github.com/ddrugeon/terrafactor/internal/state"
 
 	"github.com/stretchr/testify/assert"
 )

@@ -19,14 +19,14 @@ help:
 	@echo 'Usage:'
 	@echo '    make build           Compile the project.'
 	@echo '    make get-deps        runs dep ensure, mostly used for ci.'
-	
+
 	@echo '    make clean           Clean the directory tree.'
 	@echo
 
 build:
 	@echo "building ${BIN_NAME} ${VERSION}"
 	@echo "GOPATH=${GOPATH}"
-	go build -ldflags "-X github.com/lacion/terrafactor/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/lacion/terrafactor/version.BuildDate=${BUILD_DATE}" -o bin/${BIN_NAME}
+	go build -ldflags "-X github.com/ddrugeon/terrafactor/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/lacion/terrafactor/version.BuildDate=${BUILD_DATE}" -o bin/${BIN_NAME}
 
 get-deps:
 	dep ensure

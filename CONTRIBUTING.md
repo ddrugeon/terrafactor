@@ -8,7 +8,7 @@ You can contribute in many ways:
 
 ### Report Bugs
 
-Report bugs at https://gitlab.com/david.drugeon-hamon/terrafactor/-/issues.
+Report bugs at https://github.com/ddrugeon/terrafactor/-/issues.
 
 If you are reporting a bug, please include:
 

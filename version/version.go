@@ -1,3 +1,4 @@
+// Package version gives information about version
 /*
 MIT License
 

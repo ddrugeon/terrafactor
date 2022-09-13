@@ -29,11 +29,11 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ddrugeon/terrafactor/cmd/options"
+	"github.com/ddrugeon/terrafactor/internal/state"
 	"github.com/pterm/pterm"
 	"github.com/pterm/pterm/putils"
 	"github.com/spf13/cobra"
-	"gitlab.com/david.drugeon-hamon/terrafactor/cmd/options"
-	"gitlab.com/david.drugeon-hamon/terrafactor/internal/state"
 )
 
 // NewListCommand creates a new `resources list` command

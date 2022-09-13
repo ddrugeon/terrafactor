@@ -1,4 +1,4 @@
-module gitlab.com/david.drugeon-hamon/terrafactor
+module github.com/ddrugeon/terrafactor
 
 go 1.18
 

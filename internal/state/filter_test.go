@@ -3,8 +3,8 @@ package state_test
 import (
 	"testing"
 
+	"github.com/ddrugeon/terrafactor/internal/state"
 	"github.com/stretchr/testify/assert"
-	"gitlab.com/david.drugeon-hamon/terrafactor/internal/state"
 )
 
 func TestThatFilterMatchReturnsTrueWhenResourceMatches(t *testing.T) {

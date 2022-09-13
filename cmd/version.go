@@ -1,7 +1,8 @@
+// Package cmd list cli commands
 /*
 MIT License
 
-Copyright 2022 - © David Drugeon-Hamon
+# Copyright 2022 - © David Drugeon-Hamon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +26,9 @@ package cmd
 
 import (
 	"fmt"
+
+	"github.com/ddrugeon/terrafactor/version"
 	"github.com/spf13/cobra"
-	"gitlab.com/david.drugeon-hamon/terrafactor/version"
 )
 
 // NewVersionCommand creates a new `resources`command

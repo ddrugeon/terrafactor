@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright 2022 - © David Drugeon-Hamon
+# Copyright 2022 - © David Drugeon-Hamon
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,10 @@ package cmd_test
 import (
 	"testing"
 
+	"github.com/ddrugeon/terrafactor/cmd"
+	"github.com/ddrugeon/terrafactor/cmd/options"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
-	"gitlab.com/david.drugeon-hamon/terrafactor/cmd"
-	"gitlab.com/david.drugeon-hamon/terrafactor/cmd/options"
 )
 
 func TestNewRootCommand(t *testing.T) {
