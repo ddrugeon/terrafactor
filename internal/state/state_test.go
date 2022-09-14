@@ -265,5 +265,4 @@ func TestTerraformState_ListResources(t *testing.T) {
 
 		assert.Equal(t, expected, input.ListResources(filter))
 	})
-
 }

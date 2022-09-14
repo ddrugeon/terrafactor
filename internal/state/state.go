@@ -83,7 +83,7 @@ func FromReader(reader io.Reader) TerraformState {
 	decoder := json.NewDecoder(reader)
 
 	for {
-		var err = decoder.Decode(&terraformState)
+		err := decoder.Decode(&terraformState)
 		if err == io.EOF {
 			break
 		}

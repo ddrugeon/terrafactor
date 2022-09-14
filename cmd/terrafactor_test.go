@@ -40,5 +40,4 @@ func TestNewRootCommand(t *testing.T) {
 	assert.Equal(t, options.ApplicationName, cmd.Use)
 	assert.Equal(t, options.ApplicationShort, cmd.Short)
 	assert.Equal(t, options.ApplicationLong, cmd.Long)
-
 }

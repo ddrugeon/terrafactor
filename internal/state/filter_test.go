@@ -62,11 +62,12 @@ func TestThatFilterMatchReturnsTrueWhenResourceMatches(t *testing.T) {
 		assert.True(t, filter.Matches(resource))
 	})
 
-	t.Run("Should returns true if filter criterias are empty", func(t *testing.T) {
+	t.Run("Should returns true if filter criteria are empty", func(t *testing.T) {
 		filter := state.ResourceFilter{}
 		assert.True(t, filter.Matches(resource))
 	})
 }
+
 func TestThatFilterMatchReturnsFalseWhenResourceNotMatches(t *testing.T) {
 	resource := state.TerraformResource{
 		Type:     "aws_caller_identity",
@@ -118,11 +119,12 @@ func TestThatFilterMatchReturnsFalseWhenResourceNotMatches(t *testing.T) {
 		assert.False(t, filter.Matches(resource))
 	})
 }
+
 func TestCreateResourceFilterFromString(t *testing.T) {
 	t.Run("Empty string should create an empty ResourceFilter", func(t *testing.T) {
 		input := ""
 		output, err := state.CreateResourceFilterFromString(input)
-		assert.Nil(t, err, "An error occured when reading filter from string")
+		assert.Nil(t, err, "An error occurred when reading filter from string")
 		assert.Empty(t, output)
 	})
 

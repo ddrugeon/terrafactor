@@ -32,7 +32,7 @@ import (
 
 const filterErrorMsg = "Filter must conform pattern: type.name or module.module_name.type.name"
 
-// ResourceFilter is a struct giving criterias to filter resources
+// ResourceFilter is a struct giving criteria to filter resources
 type ResourceFilter struct {
 	Type     string
 	Mode     string

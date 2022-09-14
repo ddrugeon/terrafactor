@@ -32,7 +32,7 @@ import (
 func NewResourceCommand() *cobra.Command {
 	command := &cobra.Command{
 		Use:   "resources",
-		Short: "List available resources in state file given in argument.",
+		Short: "Command related to terraform resources.",
 		Run: func(cmd *cobra.Command, args []string) {
 			err := cmd.Help()
 			if err != nil {

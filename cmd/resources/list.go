@@ -40,7 +40,7 @@ import (
 func NewListCommand() *cobra.Command {
 	command := &cobra.Command{
 		Use:   "list",
-		Short: "List all the boards",
+		Short: "List resources found in given tfstate",
 		Run:   listResources,
 		Args:  cobra.NoArgs,
 	}
