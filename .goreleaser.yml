@@ -1,57 +1,61 @@
 project_name: terrafactor
-env:
-  - GO111MODULE=on
-
 before:
   hooks:
     - go mod tidy
-
 snapshot:
   name_template: '{{ incpatch .Version }}-next'
-
 builds:
-  - env:
-      - CGO_ENABLED=0
-    goos:
-      - linux
-      - darwin
-      - windows
-    goarch:
-      - 386
-      - amd64
-      - arm
-      - arm64
-    goarm:
-      - "7"
-    mod_timestamp: '{{ .CommitTimestamp }}'
-    flags:
-      - -trimpath
-    ldflags:
+- env:
+    - CGO_ENABLED=0
+  goos:
+    - linux
+    - darwin
+    - windows
+  goarch:
+    - 386
+    - amd64
+    - arm
+    - arm64
+  goarm:
+    - "7"
+  mod_timestamp: '{{ .CommitTimestamp }}'
+  flags:
+    - -trimpath
+  ldflags:
       - -s -w -X github.com/ddrugeon/terrafactor/version.Version={{.Version}} -X github.com/ddrugeon/terrafactor/version.GitCommit={{.Commit}} -X github.com/ddrugeon/terrafactor/version.BuildDate={{.Date}}
-    ignore:
-      - goos: darwin
-        goarch: 386
-      - goos: windows
-        goarch: 386
-
-universal_binaries:
-- replace: false
-
+  ignore:
+    - goos: darwin
+      goarch: 386
+    - goos: windows
+      goarch: 386
 checksum:
-  name_template: "{{ .ProjectName }}_checksums.txt"
-
+  name_template: 'checksums.txt'
+archives:
+  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    format_overrides:
+    - goos: windows
+      format: zip
+    files:
+      - README.md
+      - LICENSE
 changelog:
   sort: asc
-  use: github
   filters:
     exclude:
-      - '^test:'
-      - '^chore'
-      - 'merge conflict'
-      - Merge pull request
-      - Merge remote-tracking branch
-      - Merge branch
-      - go mod tidy
+    - '^docs:'
+    - '^test:'
+    - '^chore'
+    - 'merge conflict'
+    - Merge pull request
+    - Merge remote-tracking branch
+    - Merge branch
+    - go mod tidy
   groups:
     - title: Dependency updates
       regexp: "^.*feat\\(deps\\)*:+.*$"
@@ -67,25 +71,6 @@ changelog:
       order: 400
     - title: Other work
       order: 9999
-
-archives:
-  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
-    replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
-    format_overrides:
-    - goos: windows
-      format: zip
-    files:
-      - README.md
-      - LICENSE
-
 release:
   footer: |
     **Full Changelog**: https://github.com/ddrugeon/terrafactor/compare/{{ .PreviousTag }}...{{ .Tag }}
-
-milestones:
-  - close: true
